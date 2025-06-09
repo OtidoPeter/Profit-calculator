@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 /*Goals
@@ -12,9 +13,18 @@ import (
 -Not 0
 2) Store calculated results into file*/
 
+const resultsEarningsFile = "results.txt"
+
+func getResultFromFile() float64 {
+	data, _ := os.ReadFile(resultsEarningsFile)
+	resultsText := string(data)
+	results, _ := strconv.ParseFloat(resultsText, 64)
+	return results
+}
+
 func resultsIntoFile(results float64) {
 	resultsText := fmt.Sprint(results)
-	os.WriteFile("results.txt", []byte(resultsText), 0644)
+	os.WriteFile(resultsEarningsFile, []byte(resultsText), 0644)
 }
 
 func main() {
