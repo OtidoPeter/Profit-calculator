@@ -2,7 +2,20 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
+
+/*Goals
+1)validate user input
+-show error message and exit if invalid input is provided
+-No negative numbers
+-Not 0
+2) Store calculated results into file*/
+
+func resultsIntoFile(results float64) {
+	resultsText := fmt.Sprint(results)
+	os.WriteFile("results.txt", []byte(resultsText), 0644)
+}
 
 func main() {
 	var taxRate float64
@@ -20,6 +33,7 @@ func main() {
 	// fmt.Print("Tax rate: ")
 	taxRate = outputNum("Tax rate: ")
 	// fmt.Scan(&taxRate)
+	resultsIntoFile(taxRate)
 
 	earningsBeforeTax, earningsAfterTax, ratio := calculateEarnings(revenue, expenses, taxRate)
 	// earningsAfterTax := (earningsBeforeTax) * (1 - taxRate/100)
@@ -41,7 +55,6 @@ func outputNum(num string) float64 {
 }
 
 func calculateEarnings(revenue, expenses, taxRate float64) (float64, float64, float64) {
-	//
 	ebt := revenue - expenses
 	eat := (ebt) * (1 - taxRate/100)
 	rat := ebt / eat
