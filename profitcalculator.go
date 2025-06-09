@@ -14,18 +14,11 @@ import (
 -Not 0
 2) Store calculated results into file*/
 
-const resultsEarningsFile = "results.txt"
-
 func getResultFromFile() float64 {
-	data, _ := os.ReadFile(resultsEarningsFile)
+	data, _ := os.ReadFile("results.txt")
 	resultsText := string(data)
 	results, _ := strconv.ParseFloat(resultsText, 64)
 	return results
-}
-
-func resultsIntoFile(results float64) {
-	resultsText := fmt.Sprint(results)
-	os.WriteFile(resultsEarningsFile, []byte(resultsText), 0644)
 }
 
 func main() {
@@ -33,26 +26,31 @@ func main() {
 	var revenue float64
 	var expenses float64
 
-	revenue, err1 := outputNum("Revenue: ")
+	revenue, err := outputNum("Revenue: ")
 
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
+	if err != nil {
+		fmt.Println(err)
+		return
+		//panic(err)
+	}
 
-	expenses, err2 := outputNum("Expenses: ")
+	expenses, err = outputNum("Expenses: ")
 
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-
-	taxRate, err3 := outputNum("Tax rate: ")
-
-	if err1 != nil || err2 != nil || err3 != nil {
-		fmt.Println(err1)
+	if err != nil {
+		fmt.Println(err)
 		return
 	}
+
+	taxRate, err = outputNum("Tax rate: ")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// if err1 != nil || err2 != nil || err3 != nil {
+	//	fmt.Println(err1)
+	//	return
+	//}
 
 	ebt, eat, rat := calculateEarnings(revenue, expenses, taxRate)
 	// earningsAfterTax := (earningsBeforeTax) * (1 - taxRate/100)
@@ -61,9 +59,12 @@ func main() {
 	fmt.Printf("%.1f\n", ebt)
 	fmt.Printf("%.1f\n", eat)
 	fmt.Printf("%.1f\n", rat)
-	//fmt.Println(earningsBeforeTax)
-	//fmt.Println(earningsAfterTax)
-	// fmt.Println(ratio)
+	storeResults(ebt, eat, rat)
+}
+
+func storeResults(ebt, eat, rat float64) {
+	results := fmt.Sprintf("EBT: %.1f\nProfit: %.1f\nRatio: %.3f\n", ebt, eat, rat)
+	os.WriteFile("results.txt", []byte(results), 0644)
 }
 
 func outputNum(num string) (float64, error) {
