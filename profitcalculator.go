@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -32,36 +33,48 @@ func main() {
 	var revenue float64
 	var expenses float64
 
-	// fmt.Print("Revenue: ")
-	revenue = outputNum("Revenue: ")
-	// fmt.Scan(&revenue)
+	revenue, err1 := outputNum("Revenue: ")
 
-	// fmt.Print("Expenses: ")
-	expenses = outputNum("Expenses: ")
-	// fmt.Scan(&expenses)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
 
-	// fmt.Print("Tax rate: ")
-	taxRate = outputNum("Tax rate: ")
-	// fmt.Scan(&taxRate)
-	resultsIntoFile(taxRate)
+	expenses, err2 := outputNum("Expenses: ")
 
-	earningsBeforeTax, earningsAfterTax, ratio := calculateEarnings(revenue, expenses, taxRate)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+
+	taxRate, err3 := outputNum("Tax rate: ")
+
+	if err1 != nil || err2 != nil || err3 != nil {
+		fmt.Println(err1)
+		return
+	}
+
+	ebt, eat, rat := calculateEarnings(revenue, expenses, taxRate)
 	// earningsAfterTax := (earningsBeforeTax) * (1 - taxRate/100)
 	// ratio := earningsBeforeTax / earningsAfterTax
 
-	fmt.Printf("%.1f\n", earningsBeforeTax)
-	fmt.Printf("%.1f\n", earningsAfterTax)
-	fmt.Printf("%.1f\n", ratio)
+	fmt.Printf("%.1f\n", ebt)
+	fmt.Printf("%.1f\n", eat)
+	fmt.Printf("%.1f\n", rat)
 	//fmt.Println(earningsBeforeTax)
 	//fmt.Println(earningsAfterTax)
 	// fmt.Println(ratio)
 }
 
-func outputNum(num string) float64 {
+func outputNum(num string) (float64, error) {
 	var userInput float64
 	fmt.Print(num)
 	fmt.Scan(&userInput)
-	return userInput
+
+	if userInput <= 0 {
+		return 0, errors.New("Value must be a positive number.")
+	}
+	return userInput, nil
 }
 
 func calculateEarnings(revenue, expenses, taxRate float64) (float64, float64, float64) {
