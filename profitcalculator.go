@@ -7,14 +7,14 @@ func main() {
 	var expenses float64
 	var taxRate float64
 
-	outputText("Revenue: ")
-	fmt.Scan(&revenue)
+	revenue = getUserInput("Revenue: ")
+	// fmt.Scan(&revenue)
 
-	outputText("Expenses: ")
-	fmt.Scan(&expenses)
+	expenses = getUserInput("Expenses: ")
+	// fmt.Scan(&expenses)
 
-	outputText("Tax Rate: ")
-	fmt.Scan(&taxRate)
+	taxRate = getUserInput("Tax Rate: ")
+	// fmt.Scan(&taxRate)
 
 	operations(revenue, expenses, taxRate)
 	/*ebt := revenue - expenses
@@ -27,8 +27,11 @@ func main() {
 	*/
 }
 
-func outputText(text string) {
+func getUserInput(text string) float64 {
+	var userInput float64
 	fmt.Print(text)
+	fmt.Scan(&userInput)
+	return userInput
 }
 
 func operations(revenue, expenses, taxRate float64) (float64, float64, float64) {
