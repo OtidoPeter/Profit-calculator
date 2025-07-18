@@ -2,48 +2,39 @@ package main
 
 import "fmt"
 
+/*
+Goals
+1) Validate user input
+	-> Show error message and exit if invalid input is provided
+	-No negative numbers
+	-Not 0
+2)Store calculated results into file
+*/
+
 func main() {
-	var revenue float64
-	var expenses float64
-	var taxRate float64
+	revenue := getUserInput("Revenue: ")
+	expenses := getUserInput("Expenses: ")
+	taxRate := getUserInput("Tax Rate: ")
 
-	revenue = getUserInput("Revenue: ")
-	// fmt.Scan(&revenue)
+	ebt, profit, ratio := calculateFinancials(revenue, expenses, taxRate)
 
-	expenses = getUserInput("Expenses: ")
-	// fmt.Scan(&expenses)
-
-	taxRate = getUserInput("Tax Rate: ")
-	// fmt.Scan(&taxRate)
-
-	operations(revenue, expenses, taxRate)
-	/*ebt := revenue - expenses
-	profit := ebt * (1 - taxRate/100)
-	ratio := ebt / profit
-
-	fmt.Println(ebt)
-	fmt.Println(profit)
-	fmt.Println(ratio)
-	*/
+	fmt.Printf("%.1f\n", ebt)
+	fmt.Printf("%.1f\n", profit)
+	fmt.Printf("%.3f\n", ratio)
 }
 
-func getUserInput(text string) float64 {
-	var userInput float64
-	fmt.Print(text)
-	fmt.Scan(&userInput)
-	return userInput
-}
-
-func operations(revenue, expenses, taxRate float64) (float64, float64, float64) {
+func calculateFinancials(revenue, expenses, taxRate float64) (float64, float64, float64) {
 	ebt := revenue - expenses
 	profit := ebt * (1 - taxRate/100)
 	ratio := ebt / profit
 
-	reformattedEbt := fmt.Sprintf("Earnings before tax: %.2f\n", ebt)
-	reformattedProfit := fmt.Sprintf("Earnings after tax: %.2f\n", profit)
-	reformattedRatio := fmt.Sprintf("Ratio: %.2f\n", ratio)
-
-	fmt.Print(reformattedEbt, reformattedProfit, reformattedRatio)
-
 	return ebt, profit, ratio
+}
+
+func getUserInput(infoText string) float64 {
+	var userInput float64
+	fmt.Print(infoText)
+	fmt.Scan(&userInput)
+
+	return userInput
 }
