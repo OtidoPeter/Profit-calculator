@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -22,9 +23,29 @@ func writeResultsToFile(results float64) {
 }
 
 func main() {
-	revenue := getUserInput("Revenue: ")
-	expenses := getUserInput("Expenses: ")
-	taxRate := getUserInput("Tax Rate: ")
+	revenue, err1 := getUserInput("Revenue: ")
+	/*
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	*/
+
+	expenses, err2 := getUserInput("Expenses: ")
+	/*
+		if err != nil {
+			fmt.Println(err)
+			return
+
+		}
+	*/
+
+	taxRate, err3 := getUserInput("Tax Rate: ")
+
+	if err1 != nil || err2 != nil || err3 != nil {
+		fmt.Println(err1)
+		return
+	}
 
 	ebt, profit, ratio := calculateFinancials(revenue, expenses, taxRate)
 
@@ -45,15 +66,14 @@ func calculateFinancials(revenue, expenses, taxRate float64) (float64, float64, 
 	return ebt, profit, ratio
 }
 
-func getUserInput(infoText string) float64 {
+func getUserInput(infoText string) (float64, error) {
 	var userInput float64
 	fmt.Print(infoText)
 	fmt.Scan(&userInput)
 
 	if userInput <= 0 {
-		fmt.Println("Invalid amount! Should be greater than 0.")
-		os.Exit(1)
+		return 0, errors.New("The float provided should be greater than 0")
 	}
 
-	return userInput
+	return userInput, nil
 }
