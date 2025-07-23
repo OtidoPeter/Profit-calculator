@@ -17,9 +17,9 @@ Goals
 2)Store calculated results into file
 */
 
-func writeResultsToFile(ebt, profit, ratio float64) {
-	results := fmt.Sprintf("EBT: %.1f\nProfit: %.1f\nRatio: %.3f\n", ebt, profit, ratio)
-	os.WriteFile(resultsFileName, []byte(results), 0644)
+func writeFloatToFile(fileName string, ebt float64, profit float64, ratio float64) {
+	valueText := fmt.Sprintf("EBT: %.1f\nProfit: %.1f\nRatio: %.3f\n", ebt, profit, ratio)
+	os.WriteFile(fileName, []byte(valueText), 0644)
 }
 
 func main() {
@@ -58,7 +58,7 @@ func main() {
 	fmt.Printf("%.1f\n", profit)
 	fmt.Printf("%.3f\n", ratio)
 
-	writeResultsToFile(ebt, profit, ratio)
+	writeFloatToFile(resultsFileName, ebt, profit, ratio)
 }
 
 func calculateFinancials(revenue, expenses, taxRate float64) (float64, float64, float64) {
